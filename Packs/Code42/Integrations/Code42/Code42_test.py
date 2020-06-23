@@ -1239,6 +1239,25 @@ def test_fetch_incidents_handles_multi_severity(code42_fetch_incidents_mock):
     assert "LOW" in str(code42_fetch_incidents_mock.alerts.search.call_args[0][0])
 
 
+def test_fetch_when_no_significant_file_categories_ignores_filter(code42_fetch_incidents_mock, mocker):
+    response_text = MOCK_ALERT_DETAILS_RESPONSE.replace('"isSignificant": true', '"isSignificant": false')
+    alert_details_response = create_mock_code42_sdk_response(mocker, response_text)
+    code42_fetch_incidents_mock.alerts.get_details.return_value = alert_details_response
+    client = create_client(code42_fetch_incidents_mock)
+    _, _, _ = fetch_incidents(
+        client=client,
+        last_run={"last_fetch": None},
+        first_fetch_time=MOCK_FETCH_TIME,
+        event_severity_filter=None,
+        fetch_limit=10,
+        include_files=True,
+        integration_context=None,
+    )
+    actual_query = str(code42_fetch_incidents_mock.securitydata.search_file_events.call_args[0][0])
+    assert "fileCategory" not in actual_query
+    assert "IMAGE" not in actual_query
+
+
 def test_fetch_incidents_first_run(code42_fetch_incidents_mock):
     client = create_client(code42_fetch_incidents_mock)
     next_run, incidents, remaining_incidents = fetch_incidents(

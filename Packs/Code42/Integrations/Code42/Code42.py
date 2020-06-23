@@ -411,7 +411,8 @@ class ObservationToSecurityQueryMapper(object):
         """Determine if file categorization is significant"""
         observed_file_categories = self._observation_data["fileCategories"]
         categories = [c["category"].upper() for c in observed_file_categories if c["isSignificant"]]
-        return FileCategory.is_in(categories)
+        if categories:
+            return FileCategory.is_in(categories)
 
 
 def map_observation_to_security_query(observation, actor):
@@ -695,7 +696,7 @@ class Code42SecurityIncidentFetcher(object):
             if remaining_incidents:
                 return (
                     self._last_run,
-                    remaining_incidents[: self._fetch_limit],
+                    remaining_incidents[:self._fetch_limit],
                     remaining_incidents[self._fetch_limit:],
                 )
 
