@@ -79,7 +79,7 @@ script:
     - auto: PREDEFINED
       default: false
       description: Exposure types to search for. Can be "RemovableMedia", "ApplicationRead",
-        "CloudStorage", "IsPublic", "SharedViaLink", or "SharedViaDomain".
+        "CloudStorage", "IsPublic", "SharedViaLink", "SharedViaDomain", or "OutsideTrustedDomains".
       isArray: true
       name: exposure
       predefined:
@@ -89,6 +89,7 @@ script:
       - IsPublic
       - SharedViaLink
       - SharedViaDomain
+      - OutsideTrustedDomains
       required: false
       secret: false
     - default: false
@@ -331,7 +332,7 @@ script:
       description: The username to remove from the Departing Employee List.
       isArray: false
       name: username
-      required: true
+      required: false
       secret: false
     deprecated: false
     description: Removes a user from the Departing Employee List.
@@ -596,7 +597,18 @@ script:
     - contextPath: Code42.User.UserID
       description: The ID of a Code42 User.
       type: String
-  dockerimage: demisto/py42:1.0.0.9323
+  - arguments:
+    - default: false
+      description: Either the SHA256 or MD5 hash of the file.
+      isArray: false
+      name: hash
+      required: true
+      secret: false
+    deprecated: false
+    description: Downloads a file from Code42 servers.
+    execution: false
+    name: code42-download-file
+  dockerimage: demisto/py42:1.0.0.9653
   feed: false
   isfetch: true
   longRunning: false
