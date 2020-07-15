@@ -7,7 +7,7 @@ Use the Code42 integration to identify potential data exfiltration from insider 
 
 | **Parameter** | **Description** | **Required** |
 | --- | --- | --- |
-| console_url | Code42 Console URL for the pod your Code42 instance is running in | True |
+| console_url | Code42 Console URL for your Code42 environment | True |
 | credentials | Username | True |
 | isFetch | Fetch incidents | False |
 | incidentType | Incident type | False |
@@ -18,11 +18,11 @@ Use the Code42 integration to identify potential data exfiltration from insider 
 
 4. Click **Test** to validate the URLs, token, and connection.
 ## Commands
-You can execute these commands from the Demisto CLI, as part of an automation, or in a playbook.
+You can execute these commands from the XSOAR CLI, as part of an automation, or in a playbook.
 After you successfully execute a command, a DBot message appears in the War Room with the command details.
 ### code42-securitydata-search
 ***
-Searches for a file in Security Data by JSON query, hash, username, device hostname, exfiltration type, or a combination of parameters. At least one argument must be passed in the command. If a JSON argument is passed, it will be used to the exclusion of other parameters, otherwise parameters will be combined with an AND clause.
+Searches for file events by JSON query, hash, username, device hostname, exfiltration type, or a combination of parameters. At least one argument must be passed in the command. If a JSON argument is passed, it will be used to the exclusion of other parameters, otherwise parameters will be combined with an AND clause.
 
 
 #### Base Command
@@ -877,8 +877,8 @@ Removes a Code42 user from a legal hold matter.
 
 | **Argument Name** | **Description** | **Required** |
 | --- | --- | --- |
-| username | The username of the user to remove from the given legal hold matter. | Required | 
-| mattername | The name of the legal hold matter from which to which the user will be removed. | Required | 
+| username | The username of the user to release from the given legal hold matter. | Required | 
+| mattername | The name of the legal hold matter from which the user will be released. | Required | 
 
 
 #### Context Output
@@ -917,7 +917,7 @@ Removes a Code42 user from a legal hold matter.
 
 ### code42-download-file
 ***
-Downloads a file from Code42 servers.
+Downloads a file from Code42.
 
 #### Base Command
 
