@@ -1,6 +1,5 @@
 id: Code42 File Download
-version: 10
-vcShouldKeepItemLegacyProdMachine: false
+version: -1
 name: Code42 File Download
 description: This playbook downloads a file via Code42 by either MD5 or SHA256 hash.
 starttaskid: "0"
@@ -15,6 +14,7 @@ tasks:
       name: ""
       iscommand: false
       brand: ""
+      description: ''
     nexttasks:
       '#none#':
       - "1"
@@ -223,6 +223,7 @@ tasks:
       type: title
       iscommand: false
       brand: ""
+      description: ''
     separatecontext: false
     view: |-
       {
@@ -258,7 +259,7 @@ inputs:
       - operator: uniq
   required: false
   description: MD5 hash to search for
-  playbookInputQuery: null
+  playbookInputQuery:
 - key: SHA256
   value:
     complex:
@@ -268,12 +269,12 @@ inputs:
       - operator: uniq
   required: false
   description: SHA256 hash to search for
-  playbookInputQuery: null
+  playbookInputQuery:
 - key: Filename
   value: {}
   required: false
   description: The name of the file to save as.
-  playbookInputQuery: null
+  playbookInputQuery:
 outputs:
 - contextPath: File.Size
   description: The size of the file.
@@ -295,3 +296,6 @@ outputs:
   description: The MD5 hash of the file.
 - contextPath: File.Extension
   description: The file extension.
+fromversion: 5.0.0
+tests:
+- No Test
