@@ -1,0 +1,384 @@
+id: Code42 Suspicious Activity Action
+version: -1
+name: Code42 Suspicious Activity Action
+description: Take corrective actions against a Code42 user found to be exposing file data.
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: 394a123f-bd8b-4e37-8a47-6bee03b9b350
+    type: start
+    task:
+      description: The start task.
+      id: 394a123f-bd8b-4e37-8a47-6bee03b9b350
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "12"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1030,
+          "y": -130
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "2":
+    id: "2"
+    taskid: b3a0166d-2e2c-4773-8ace-e1118b4bc58d
+    type: title
+    task:
+      id: b3a0166d-2e2c-4773-8ace-e1118b4bc58d
+      version: -1
+      name: Complete
+      description: Complete
+      type: title
+      iscommand: false
+      brand: ""
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1030,
+          "y": 810
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "4":
+    id: "4"
+    taskid: d7600ec2-a1a6-41d4-8480-672574f27965
+    type: regular
+    task:
+      id: d7600ec2-a1a6-41d4-8480-672574f27965
+      version: -1
+      name: Block User
+      description: Blocks a user in Code42.  A blocked user is not allowed to log in or restore files. Backups will continue if the user is still active.
+      script: Code42|||code42-user-block
+      type: regular
+      iscommand: true
+      brand: Code42
+    nexttasks:
+      '#none#':
+      - "2"
+    scriptarguments:
+      username:
+        simple: ${inputs.username}
+    continueonerror: true
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 592.5,
+          "y": 460
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "6":
+    id: "6"
+    taskid: 50178d91-f4cf-4dcb-870d-2272cae90161
+    type: regular
+    task:
+      id: 50178d91-f4cf-4dcb-870d-2272cae90161
+      version: -1
+      name: Add User to Legal Hold
+      description: Adds a Code42 user to a legal hold matter.
+      script: Code42|||code42-legalhold-add-user
+      type: regular
+      iscommand: true
+      brand: Code42
+    nexttasks:
+      '#none#':
+      - "2"
+    scriptarguments:
+      mattername:
+        simple: ${inputs.mattername}
+      username:
+        simple: ${inputs.username}
+    continueonerror: true
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1030,
+          "y": 460
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "7":
+    id: "7"
+    taskid: 329da84b-df64-4987-8bd7-b316c0f2d3be
+    type: regular
+    task:
+      id: 329da84b-df64-4987-8bd7-b316c0f2d3be
+      version: -1
+      name: Add User to Watchlist
+      description: Add a user to a watchlist.
+      script: '|||code42-watchlists-add-user'
+      type: regular
+      iscommand: true
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "2"
+    scriptarguments:
+      username:
+        simple: ${inputs.username}
+      watchlist:
+        simple: SUSPICIOUS_SYSTEM_ACTIVITY
+    continueonerror: true
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1435,
+          "y": 460
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "8":
+    id: "8"
+    taskid: 0343cdd9-33db-4b11-8aa7-e98b596f1c32
+    type: condition
+    task:
+      id: 0343cdd9-33db-4b11-8aa7-e98b596f1c32
+      version: -1
+      name: Block user?
+      description: Block user?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "4"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: containsGeneral
+          left:
+            value:
+              complex:
+                root: inputs.action
+                transformers:
+                - operator: toUpperCase
+            iscontext: true
+          right:
+            value:
+              simple: BLOCK
+    view: |-
+      {
+        "position": {
+          "x": 592.5,
+          "y": 205
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "10":
+    id: "10"
+    taskid: 7be87c0b-c763-427a-827c-d3b995ec7b60
+    type: condition
+    task:
+      id: 7be87c0b-c763-427a-827c-d3b995ec7b60
+      version: -1
+      name: Add user to legal hold?
+      description: Add user to legal hold?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "6"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: containsGeneral
+          left:
+            value:
+              complex:
+                root: inputs.action
+                transformers:
+                - operator: toUpperCase
+            iscontext: true
+          right:
+            value:
+              simple: ADD-TO-LEGAL-HOLD
+    view: |-
+      {
+        "position": {
+          "x": 1030,
+          "y": 205
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "11":
+    id: "11"
+    taskid: 294384fa-09a5-4efa-89eb-49172f39e0d8
+    type: condition
+    task:
+      id: 294384fa-09a5-4efa-89eb-49172f39e0d8
+      version: -1
+      name: Add user to Suspicious System Activity Watchlist?
+      description: Add user to high risk employees list?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "7"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: containsGeneral
+          left:
+            value:
+              complex:
+                root: inputs.action
+                transformers:
+                - operator: toUpperCase
+            iscontext: true
+          right:
+            value:
+              simple: ADD-TO-WATCHLIST
+    view: |-
+      {
+        "position": {
+          "x": 1445,
+          "y": 205
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    isoversize: false
+    isautoswitchedtoquietmode: false
+  "12":
+    id: "12"
+    taskid: c06b0b08-00c5-4115-87cb-3354db2af58e
+    type: condition
+    task:
+      id: c06b0b08-00c5-4115-87cb-3354db2af58e
+      version: -1
+      description: Returns 'yes' if integration brand is available. Otherwise returns 'no'
+      name: Is Code42 available?
+      type: condition
+      iscommand: false
+      brand: ""
+      scriptName: IsIntegrationAvailable
+    nexttasks:
+      '#default#':
+      - "2"
+      "yes":
+      - "10"
+      - "11"
+      - "8"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1030,
+          "y": 15
+        }
+      }
+    note: false
+    timertriggers: []
+    ignoreworker: false
+    skipunavailable: false
+    quietmode: 0
+    scriptarguments:
+      brandname:
+        simple: Code42
+    results:
+    - brandInstances
+    isoversize: false
+    isautoswitchedtoquietmode: false
+view: |-
+  {
+    "linkLabelsPosition": {
+      "11_2_#default#": 0.73,
+      "8_4_yes": 0.12
+    },
+    "paper": {
+      "dimensions": {
+        "height": 1005,
+        "width": 1232.5,
+        "x": 592.5,
+        "y": -130
+      }
+    }
+  }
+inputs:
+- key: action
+  value: {}
+  required: true
+  description: The comma-separated list of remediation actions to take on the user. Options include BLOCK, ADD-TO-LEGAL-HOLD, ADD-TO-WATCHLIST.
+  playbookInputQuery:
+- key: username
+  value: {}
+  required: true
+  description: Email id of the employee on whom action is to be taken
+  playbookInputQuery:
+- key: mattername
+  value: {}
+  required: false
+  description: The name of the legal hold matter. Mandatory when ADD-TO-LEGAL-HOLD action is selected.
+  playbookInputQuery:
+fromversion: "5.0.0"
+tests:
+- Code42 Suspicious Activity Action Test
+outputs: []
